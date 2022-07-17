@@ -5,7 +5,7 @@
 #include "concepts.h"
 #include "vector_utils.h"
 #include "range.h"
-#include "fast-IO.h"
+#include "fast_IO.h"
 
 #include <vector>
 #include <iostream>
