@@ -4,6 +4,9 @@
 #include <cassert>
 #include <sstream>
 
+
+/* Setup: A custom type with its own << and >> operators. */
+
 class CustomType {
 public:
     int x = 0;
@@ -35,6 +38,14 @@ std::istream& operator>>(std::istream& in, CustomType& c) {
     return in;
 }
 
+
+/* Static Tests */
+
+static_assert(Util::Printable<std::vector<int>>);
+static_assert(Util::Printable<std::vector<std::vector<std::vector<int>>>>);
+
+
+/* Tests */
 
 void test_print_vector() {
     std::stringstream sstream {};

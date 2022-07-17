@@ -1,7 +1,6 @@
 
-
-#ifndef jackcasey067__RANGE_H
-#define jackcasey067__RANGE_H
+#ifndef jackcasey067_RANGE_H
+#define jackcasey067_RANGE_H
 
 #include <exception>
 #include <iterator>
@@ -59,4 +58,4 @@ namespace Util {
     };
 }
 
-#endif /* jackcasey067__RANGE_H */
+#endif /* jackcasey067_RANGE_H */

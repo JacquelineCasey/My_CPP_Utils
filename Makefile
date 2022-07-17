@@ -24,7 +24,7 @@ CLEAR = $$(tput sgr0)
 # Entrypoint Commands
 
 .PHONY:
-build: $(LIB)
+build: build_folder $(LIB)
 
 .PHONY:
 test: build $(TEST_BINS)
@@ -42,8 +42,9 @@ clean:
 
 # Building Rules
 
-$(LIB): build_folder $(OBJS)
-	@ar rs $(LIB) $(OBJS)
+$(LIB): $(OBJS)
+	@echo $@
+	@ar rs $(LIB) $(OBJS) 2> /dev/null
 
 .PHONY:
 build_folder:
