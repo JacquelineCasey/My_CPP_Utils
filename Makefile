@@ -1,11 +1,11 @@
 
 CPPC = /usr/local/Cellar/llvm/14.0.6_1/bin/clang++
-CPPCFLAGS = -std=c++20 -Wall -Wextra -Werror -Wpedantic -I include/
+CPPCFLAGS = -std=c++20 -Wall -Wextra -Werror -Wpedantic -I include/ -O3
 
-SRCS = $(wildcard src/*)
+SRCS = $(wildcard src/*.cpp)
 OBJS = $(patsubst src/%.cpp, build/%.o, $(SRCS))
 
-TESTS = $(wildcard tests/*)
+TESTS = $(wildcard tests/*.cpp)
 TEST_BINS = $(patsubst tests/%.cpp, build/tests/%, $(TESTS))
 
 LIB = build/my_utils.a
