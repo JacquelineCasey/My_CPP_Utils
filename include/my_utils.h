@@ -3,12 +3,9 @@
 #define jackcasey067_MY_UTILS_H
 
 #include "concepts.h"
-#include "vector_utils.h"
-#include "range.h"
 #include "fast_IO.h"
-
-#include <vector>
-#include <iostream>
-#include <iterator>
+#include "range.h"
+#include "scope_guard.h"
+#include "vector_utils.h"
 
 #endif /* jackcasey067_MY_UTILS_H */

@@ -2,7 +2,6 @@
 #ifndef jackcasey067_RANGE_H
 #define jackcasey067_RANGE_H
 
-#include <exception>
 #include <iterator>
 
 
