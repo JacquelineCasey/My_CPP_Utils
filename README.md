@@ -4,7 +4,7 @@
 This repository contains a variety of useful C++ utilities. Currently, it contains.
 
 
-# Contents
+## Contents
 
 - Concepts:
   - Printable, if `<<` is a defined operator.
@@ -16,7 +16,7 @@ This repository contains a variety of useful C++ utilities. Currently, it contai
 - Range: An implementation of python's range() function, as an int returing iterator.
 
 
-# Building and Testing
+## Building and Testing
 
 A part of the reason why I am sharing this project is because I am proud of the
 self created `Makefile`. It's use is as follow:
@@ -26,6 +26,9 @@ and links all files in the `src/` directory
 
 `make test` will compile and run all the tests in the `tests/` directory. If a
 test returns something other than 0, the test command will fail.
+
+`make clean` removes the `build/` directory and all its contents. All artefacts produced
+by the Makefile are somewhere in the `build/` directory.
 
 
 ## Usage
