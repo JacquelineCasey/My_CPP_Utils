@@ -53,7 +53,7 @@ build/%.o: src/%.cpp $(INCLUDES)
 	@mkdir -p $(@D)
 	@$(CPPC) $(CPPCFLAGS) -c $< -o $@
 
-build/tests/%: tests/%.cpp $(INCLUDES)
+build/tests/%: tests/%.cpp $(LIB) $(INCLUDES)
 	@echo $@
 	@mkdir -p $(@D)
 	@$(CPPC) $(CPPCFLAGS) $< $(LIB) -o $@
