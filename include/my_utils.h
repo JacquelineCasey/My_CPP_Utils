@@ -3,6 +3,7 @@
 #define jackcasey067_MY_UTILS_H
 
 #include "concepts.h"
+#include "base_classes.h"
 #include "fast_IO.h"
 #include "range.h"
 #include "scope_guard.h"

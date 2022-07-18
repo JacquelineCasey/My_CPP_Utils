@@ -6,7 +6,7 @@
 #include <iostream>
 
 
-class DummyClass : public NonCopyable {
+class DummyClass : public Util::NonCopyable {
 public:
     int x;
 
