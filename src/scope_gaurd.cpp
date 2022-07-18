@@ -10,7 +10,7 @@ namespace Util {
     }
 
     void ScopeGuard::dismiss() {
-        /* Simply replace with an empyt lambda. */
+        /* Simply replace with an empty lambda. */
         func = [](){};
     }
 }
