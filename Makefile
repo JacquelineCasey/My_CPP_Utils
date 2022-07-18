@@ -2,12 +2,12 @@
 CPPC = /usr/local/Cellar/llvm/14.0.6_1/bin/clang++
 CPPCFLAGS = -std=c++20 -Wall -Wextra -Werror -Wpedantic -I include/ -O3
 
-SRCS = $(shell find src -type f -name '*.cpp')
+SRCS = $(shell find src -type f -name '*.cpp' | sort)
 OBJS = $(patsubst src/%.cpp, build/%.o, $(SRCS))
 
 INCLUDES = $(shell find include -type f -name '*.h')
 
-TESTS = $(shell find tests -type f -name '*.cpp')
+TESTS = $(shell find tests -type f -name '*.cpp' | sort)
 TEST_BINS = $(patsubst tests/%.cpp, build/tests/%, $(TESTS))
 
 LIB = build/my_utils.a
