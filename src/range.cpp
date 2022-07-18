@@ -62,6 +62,9 @@ namespace Util {
     /* Range (helper function) */
 
     int determine_stop(int start, int stop, int step) { // private helper function
+        if (step == 0)
+            throw InvalidRangeException();
+
         if (((stop - start) % step) == 0)
             return stop;
                 
