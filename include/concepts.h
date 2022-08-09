@@ -31,6 +31,24 @@ namespace Util {
     concept Readable = requires(T a) {
         __Util__Impl::read(a);
     };
+
+
+    /* Hashable */
+    template<typename T>
+    concept Hashable = requires(T a) {
+        { std::hash<T>{}(a) } -> std::convertible_to<std::size_t>;
+    };
+
+    // /* Has an equality operator. */ use std::equality_comparable<T>
+    // template<typename T>
+    // concept HasEquality = requires(const T a, const T b) {
+    //     { a == b } -> std::convertible_to<bool>;
+    // };
+
+    template<typename T>
+    concept HasLessThan = requires(const T a, const T b) {
+        { a < b } -> std::convertible_to<bool>;
+    };
 }
 
 #endif /* jackcasey067_CONCEPTS_H */
