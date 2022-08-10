@@ -6,44 +6,80 @@
 
 #include <concepts>
 #include <exception>
+#include <ranges>
 #include <vector>
 #include <unordered_map>
 
 
 namespace Util {
-    template<typename Value>
-        requires Hashable<Value> && std::equality_comparable<Value> && HasLessThan<Value>
+    class MinHeapException : std::exception {
+        std::string _what;
+
+    public:
+        MinHeapException(std::string what) : _what {what} 
+        {}
+
+        const char* what() const noexcept override {
+            return _what.c_str();
+        }
+    };
+
+    template<typename Value, typename Priority = int>
+        requires Hashable<Value> && std::equality_comparable<Value> && HasLessThan<Priority>
     class MinHeap {
     private:
-        std::vector<Value> data;
+        std::vector<std::pair<Value, Priority>> data;
         std::unordered_map<Value, int> val_to_index;
 
     public:
         MinHeap() 
-            : data {std::vector<Value>()}, val_to_index {std::unordered_map<Value, int>()}
+            : data {std::vector<std::pair<Value, Priority>>()}, val_to_index {std::unordered_map<Value, int>()}
         {}
 
-        // O(n)
-        template <typename Iterator>
+        /* Heapify constructors, run in O(n) */
+
+        template<typename Iterator>
+            requires std::is_same<std::iter_value_t<Iterator>, std::pair<Value, Priority>>::value
         MinHeap(Iterator begin, Iterator end) : MinHeap() {
             for (Iterator it {begin}; it < end; it++) {
-                val_to_index[*it] = data.size(); 
+                val_to_index[it->first] = data.size(); 
                 data.push_back(*it);
             }
 
             heapify();
         }
 
+        template<typename Range>
+            requires std::ranges::range<Range>
+        MinHeap(Range r) : MinHeap(r.begin(), r.end())
+        {}
+
+        template<typename Iterator>
+            requires std::is_same<std::iter_value_t<Iterator>, Value>::value
+        MinHeap(Iterator begin, Iterator end, std::function<Priority(const Value&)> priority_function) : MinHeap() {
+            for (Iterator it {begin}; it < end; it++) {
+                val_to_index[*it] = data.size(); 
+                data.push_back(std::pair(*it, priority_function(*it)));
+            }
+
+            heapify();
+        }
+
+        template<typename Range>
+            requires std::ranges::range<Range>
+        MinHeap(Range r, std::function<Priority(const Value&)> priority_function) : MinHeap (r.begin(), r.end(), priority_function)
+        {}
+
         // O(log(n))
         Value pop_min() {
             if (is_empty()) {
-                throw std::runtime_error("Tried to pop from empty queue.");
+                throw MinHeapException("Tried to pop from empty queue.");
             }
 
-            Value retval {data[0]};
+            Value retval {data[0].first};
             val_to_index.erase(retval);
 
-            Value last {data.back()};
+            std::pair<Value, Priority> last {data.back()};
             data.pop_back();
 
             if (data.empty()) {
@@ -51,7 +87,7 @@ namespace Util {
             }
 
             data[0] = last;
-            val_to_index[last] = 0;
+            val_to_index[last.first] = 0;
 
             sift_down(0);
 
@@ -61,35 +97,61 @@ namespace Util {
         // O(1)
         Value peak_min() {
             if (is_empty()) {
-                throw std::runtime_error("Tried to peak from empty queue.");
+                throw MinHeapException("Tried to peak from empty queue.");
             }
 
-            return data[0];
+            return data[0].first;
         }
 
-        void insert(Value v) {
+        // O(log n)
+        void insert(Value v, Priority p) {
             if (val_to_index.contains(v))
-                throw std::runtime_error("Tried to insert existing error.");
+                throw MinHeapException("Tried to insert existing error.");
 
-            data.push_back(v);
+            data.push_back({v, p});
             val_to_index[v] = data.size() - 1;
             sift_up(data.size() - 1);
         }
 
         // O(log n)
-        void replace_value(Value old, Value updated) {
-            if (!val_to_index.contains(old)) {
-                throw std::runtime_error("Tried to replace non existent value");
+        void update_priority(Value v, Priority p_new) {
+            if (!val_to_index.contains(v)) {
+                throw MinHeapException("Tried to replace non existent value");
             }
 
-            int index = val_to_index[old];
-            data[index] = updated;
+            int index = val_to_index[v];
+            data[index] = {v, p_new};
             sift_up(index);
             sift_down(index);
         }
 
         bool is_empty() const {
             return data.empty();
+        }
+
+        bool contains(const Value& v) const {
+            return val_to_index.contains(v);
+        }
+
+        Priority get_priority(const Value& v) {
+            if (!contains(v))
+                throw MinHeapException("Tried to get priority of nonexistent value");
+
+            return data[val_to_index[v]].second;
+        }
+
+        void remove(const Value& v) {
+            if (!contains(v))
+                throw MinHeapException("Tried to remove nonexistent value");
+
+            int index {val_to_index[v]};
+            swap_at(data.size() - 1, index);
+
+            val_to_index.erase(v);
+            data.pop_back();
+
+            sift_down(index);
+            sift_up(index);
         }
 
     private:
@@ -130,16 +192,16 @@ namespace Util {
             int l = left(index);
             int r = right(index);
             if (has_right(index)) { // implicitly this also means has_left()
-                if (data[r] < data[l] && data[r] < data[index]) {
+                if (data[r].second < data[l].second && data[r].second < data[index].second) {
                     swap_at(index, r);
                     sift_down(r);
                 } 
-                else if (data[l] < data[index]){
+                else if (data[l].second < data[index].second){
                     swap_at(index, l);
                     sift_down(l);
                 }
             }
-            else if (has_left(index) && data[l] < data[index]) {
+            else if (has_left(index) && data[l].second < data[index].second) {
                 swap_at(index, l);
                 sift_down(l);
             }
@@ -151,14 +213,14 @@ namespace Util {
                 return;
 
             int p = parent(index);
-            if (data[index] < data[p]) {
+            if (data[index].second < data[p].second) {
                 swap_at(index, p);
                 sift_up(p);
             }
         }
 
         void swap_at(int a, int b) {
-            std::swap(val_to_index[data[a]], val_to_index[data[b]]);
+            std::swap(val_to_index[data[a].first], val_to_index[data[b].first]);
             std::swap(data[a], data[b]);
         }
     };
