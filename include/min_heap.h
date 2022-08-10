@@ -24,8 +24,8 @@ namespace Util {
         }
     };
 
-    template<typename Value, typename Priority = int>
-        requires Hashable<Value> && std::equality_comparable<Value> && HasLessThan<Priority>
+    template<Hashable Value, typename Priority = int>
+        requires std::equality_comparable<Value> && HasLessThan<Priority>
     class MinHeap {
     private:
         std::vector<std::pair<Value, Priority>> data;
@@ -49,8 +49,7 @@ namespace Util {
             heapify();
         }
 
-        template<typename Range>
-            requires std::ranges::range<Range>
+        template<std::ranges::range Range>
         MinHeap(Range r) : MinHeap(r.begin(), r.end())
         {}
 
@@ -65,8 +64,7 @@ namespace Util {
             heapify();
         }
 
-        template<typename Range>
-            requires std::ranges::range<Range>
+        template<std::ranges::range Range>
         MinHeap(Range r, std::function<Priority(const Value&)> priority_function) : MinHeap (r.begin(), r.end(), priority_function)
         {}
 
