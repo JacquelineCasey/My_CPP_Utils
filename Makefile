@@ -31,10 +31,12 @@ build: $(LIB)
 .PHONY:
 test: build $(TEST_BINS)
 	@echo [$(BOLD)$(YELLOW)RUNNING TESTS$(CLEAR)]
+
 	@$(foreach file, $(TEST_BINS), \
-		echo && echo $(BOLD)$(WHITE)@ $(file:build/tests/%=%)$(CLEAR) && $(file) &&) \
-	\
-	echo && echo [$(BOLD)$(GREEN)ALL TESTS PASSED$(CLEAR)]
+		echo && echo $(BOLD)$(YELLOW)@ $(file:build/tests/%=%)$(CLEAR) && $(file) &&) \
+	echo
+
+	@echo [$(BOLD)$(GREEN)ALL TESTS PASSED$(CLEAR)]
 
 .PHONY:
 clean:
