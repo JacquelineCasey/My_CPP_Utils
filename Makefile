@@ -31,13 +31,13 @@ build: $(LIB)
 
 .PHONY:
 test: build $(TEST_BINS)
-	@echo $(BOLD)$(GREEN)TESTS COMPILE SUCCESSFULlY$(CLEAR)
+	@echo $(BOLD)$(GREEN)TESTS COMPILED SUCCESSFULLY$(CLEAR)
 
 	@$(foreach file, $(TEST_BINS), \
 		echo && echo $(BOLD)$(YELLOW)@ $(file:build/tests/%=%)$(CLEAR) && $(file) &&) \
 	echo
 
-	@echo $(BOLD)$(GREEN)ALL TESTS PASS$(CLEAR)
+	@echo $(BOLD)$(GREEN)ALL TESTS PASSED$(CLEAR)
 
 .PHONY:
 clean:
