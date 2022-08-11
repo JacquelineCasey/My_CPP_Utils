@@ -28,7 +28,8 @@ void test_basic() {
     assert(time1 < time2);
 } 
 
+
 int main() {
-    std::cout << "TODO testing benchmark...\n";
+    std::cout << "Testing benchmark...\n";
     test_basic();
 }
