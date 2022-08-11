@@ -27,16 +27,17 @@ CLEAR = $$(tput sgr0)
 
 .PHONY:
 build: $(LIB)
+	@echo $(BOLD)$(GREEN)LIBRARY BUILT$(CLEAR)
 
 .PHONY:
 test: build $(TEST_BINS)
-	@echo [$(BOLD)$(YELLOW)RUNNING TESTS$(CLEAR)]
+	@echo $(BOLD)$(GREEN)TESTS COMPILE SUCCESSFULlY$(CLEAR)
 
 	@$(foreach file, $(TEST_BINS), \
 		echo && echo $(BOLD)$(YELLOW)@ $(file:build/tests/%=%)$(CLEAR) && $(file) &&) \
 	echo
 
-	@echo [$(BOLD)$(GREEN)ALL TESTS PASSED$(CLEAR)]
+	@echo $(BOLD)$(GREEN)ALL TESTS PASS$(CLEAR)
 
 .PHONY:
 clean:
