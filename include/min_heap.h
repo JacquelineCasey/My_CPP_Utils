@@ -93,7 +93,7 @@ namespace Util {
         }
 
         // O(1)
-        Value peak_min() {
+        Value peak_min() const {
             if (is_empty()) {
                 throw MinHeapException("Tried to peak from empty queue.");
             }
@@ -135,7 +135,7 @@ namespace Util {
             return val_to_index.contains(v);
         }
 
-        Priority get_priority(const Value& v) {
+        Priority get_priority(const Value& v) const {
             if (!contains(v))
                 throw MinHeapException("Tried to get priority of nonexistent value");
 
