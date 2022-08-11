@@ -239,6 +239,16 @@ void test_remove() {
     assert(expected == found);
 }
 
+void test_with_range() {
+    Util::MinHeap<int> q (Util::Range(100), [](int i) {
+        return i;
+    });
+
+    for (int i : Util::Range(100)) {
+        assert(i == q.pop_min());
+    }
+}
+
 
 int main() {
     std::cout << "Testing that creating a new heap sorts the items...\n";
@@ -259,6 +269,9 @@ int main() {
     std::cout << "Testing that the heap works with large inputs...\n";
     test_large_shuffle();
 
-    std::cout << "Test removal of element...\n";
+    std::cout << "Testing removal of element...\n";
     test_remove();
+
+    std::cout << "Testing with Range...\n";
+    test_with_range();
 }

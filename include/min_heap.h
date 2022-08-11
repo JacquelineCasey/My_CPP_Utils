@@ -41,7 +41,7 @@ namespace Util {
         template<typename Iterator>
             requires std::is_same<std::iter_value_t<Iterator>, std::pair<Value, Priority>>::value
         MinHeap(Iterator begin, Iterator end) : MinHeap() {
-            for (Iterator it {begin}; it < end; it++) {
+            for (Iterator it {begin}; it != end; it++) {
                 val_to_index[it->first] = data.size(); 
                 data.push_back(*it);
             }
@@ -56,7 +56,7 @@ namespace Util {
         template<typename Iterator>
             requires std::is_same<std::iter_value_t<Iterator>, Value>::value
         MinHeap(Iterator begin, Iterator end, std::function<Priority(const Value&)> priority_function) : MinHeap() {
-            for (Iterator it {begin}; it < end; it++) {
+            for (Iterator it {begin}; it != end; it++) {
                 val_to_index[*it] = data.size(); 
                 data.push_back(std::pair(*it, priority_function(*it)));
             }
