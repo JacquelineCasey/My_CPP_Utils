@@ -139,7 +139,7 @@ namespace Util {
             if (!contains(v))
                 throw MinHeapException("Tried to get priority of nonexistent value");
 
-            return data[val_to_index[v]].second;
+            return data[val_to_index.at(v)].second;
         }
 
         void remove(const Value& v) {
