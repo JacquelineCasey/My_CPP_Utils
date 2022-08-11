@@ -66,12 +66,15 @@ void test_heapify() {
     };
     std::vector<std::string> found {};
 
+    assert(q.size() == 8);
+
     while (!q.is_empty()) {
         Order o = q.pop_min();
         found.push_back(o.product);
     }
 
     assert(expected == found);
+    assert(q.size() == 0);
 }
 
 void test_insert() {
@@ -174,7 +177,9 @@ void test_large_shuffle() {
     std::random_device rd;
     std::mt19937 g(rd());
 
-    Util::Range r(300000);
+    int N = 100000;
+
+    Util::Range r(N);
     std::vector<int> vec (r.begin(), r.end());
     std::shuffle(vec.begin(), vec.end(), g);
 
@@ -184,24 +189,25 @@ void test_large_shuffle() {
 
     Util::MinHeap<int> q2 {};
 
-    for (int i {0}; i < 1000; i++) {
+    for (int i {0}; i < N; i++) {
         assert(q.pop_min() == i);
         q2.insert(i, i);
+        assert(q2.size() == i + 1);
     }
 
-    for (int i {0}; i < 1000; i+=2) {
+    for (int i {0}; i < N; i+=2) {
         q2.update_priority(i, -i);
     }
 
-    for (int i {1}; i < 1000; i+=2) {
+    for (int i {1}; i < N; i+=2) {
         q2.update_priority(i, 3*i); // Increasing priority should also be tested.
     }
 
-    for (int i {0}; i < 1000; i+=7) {
+    for (int i {0}; i < N; i+=7) {
         q2.remove(i);
     }
 
-    for (int i {998}; i >= 0; i-=2) {
+    for (int i {N - 2}; i >= 0; i-=2) {
         if (i % 7 == 0)
             continue;
         assert(i == q2.pop_min());
@@ -211,7 +217,7 @@ void test_large_shuffle() {
         }
     }
 
-    for (int i {1}; i < 1000; i+=2) {
+    for (int i {1}; i < N; i+=2) {
         if (i % 7 == 0)
             continue;
         assert(i == q2.pop_min());

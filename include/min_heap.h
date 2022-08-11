@@ -123,6 +123,10 @@ namespace Util {
             sift_down(index);
         }
 
+        int size() const {
+            return data.size();
+        }
+
         bool is_empty() const {
             return data.empty();
         }
