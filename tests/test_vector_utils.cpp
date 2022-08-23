@@ -54,8 +54,12 @@ static_assert(!Util::RecursivelyReadable<std::pair<int, int>>);
 
 // And the old Printable and Readable do not work, but this is for the better.
 
-// static_assert(!Util::Printable<std::vector<int>>); // VSCode complains erroneously
+static_assert(!Util::Printable<std::vector<int>>); // VSCode complains erroneously
 static_assert(!Util::Readable<std::vector<int>>);
+
+// even though other custom types work
+static_assert(Util::Printable<CustomType>);
+static_assert(Util::Readable<CustomType>);
 
 /* Tests */
 
