@@ -1,4 +1,7 @@
 /.vscode
 /build
 
+/experimental/*
+!/experimental/*.cpp
+
 .DS_Store
