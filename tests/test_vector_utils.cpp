@@ -40,10 +40,22 @@ std::istream& operator>>(std::istream& in, CustomType& c) {
 
 
 /* Static Tests */
+static_assert(Util::RecursivelyPrintable<int>);
+static_assert(Util::RecursivelyPrintable<std::vector<int>>);
+static_assert(Util::RecursivelyPrintable<std::vector<std::vector<CustomType>>>);
 
-static_assert(Util::Printable<std::vector<int>>);
-static_assert(Util::Printable<std::vector<std::vector<std::vector<int>>>>);
+static_assert(Util::__Util__Impl::IsVector<std::vector<int>>);
+static_assert(Util::RecursivelyReadable<int>);
+static_assert(Util::RecursivelyReadable<std::vector<int>>);
+static_assert(Util::RecursivelyReadable<std::vector<std::vector<CustomType>>>);
 
+static_assert(!Util::RecursivelyPrintable<std::pair<int, int>>);
+static_assert(!Util::RecursivelyReadable<std::pair<int, int>>);
+
+// And the old Printable and Readable do not work, but this is for the better.
+
+// static_assert(!Util::Printable<std::vector<int>>); // VSCode complains erroneously
+static_assert(!Util::Readable<std::vector<int>>);
 
 /* Tests */
 
@@ -95,4 +107,7 @@ int main() {
 
     std::cout << "Testing Vector Reading...\n";
     test_read_vector();
+
+    // std::vector<std::pair<int, int>> p_vec {{1, 1}, {2, 2}};
+    // std::cout << p_vec << '\n';
 }
