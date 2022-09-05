@@ -88,11 +88,12 @@ public:
     class Combined : public InnerExtension<TReturn, TArgs...> {
     private:
         int count = 1;
+
     protected:
-    TReturn recurse(TArgs... args) {
-        count++;
-        return InnerExtension<TReturn, TArgs...>::recurse(args...);
-    }
+        TReturn recurse(TArgs... args) {
+            count++;
+            return InnerExtension<TReturn, TArgs...>::recurse(args...);
+        }
 
     public:
         int get_recursion_count() {
