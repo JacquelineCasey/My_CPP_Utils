@@ -13,4 +13,4 @@ namespace Util {
     void set_fast_IO();
 }
 
-#endif /* jackcasey067_FAST_IO_H*/
+#endif /* jackcasey067_FAST_IO_H */
