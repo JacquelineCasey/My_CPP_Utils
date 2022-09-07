@@ -225,6 +225,16 @@ public:
             return left / right->eval();
         assert(false);
     }
+
+    // for fun we will also convert expressions to reverse polish notation,
+    // which is noteworthy for allowing us to compute a value simply by reading
+    // symbols as stack instructions (common bytecodes use a such a stack architecture).
+    std::string to_rpn() {
+        if (op == ' ')
+            return std::to_string(left);
+        
+        return std::to_string(left) + ' ' + right->to_rpn() + ' ' + op;
+    }
 };
 
 struct PlusMinusExpr {
@@ -241,6 +251,13 @@ public:
         if (op == '-')
             return left.eval() - right->eval();
         assert(false);
+    }
+
+    std::string to_rpn() {
+        if (op == ' ')
+            return left.to_rpn();
+        
+        return left.to_rpn() + ' ' + right->to_rpn() + ' ' + op;
     }
 };
 
@@ -320,6 +337,7 @@ int main() {
         auto res {ParsePlusMinusExpr{}(s)};
         assert(res.has_value());
         std::cout << s << " = " << res.value().first.eval() << '\n';
+        std::cout << "    RPN: " << res.value().first.to_rpn() << '\n';
     }
 
     std::cout << "All tests pass\n";
