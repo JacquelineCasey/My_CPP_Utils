@@ -26,6 +26,19 @@ public:
     }
 };
 
+
+/* I stumbled across this recently: 
+ * https://www.reddit.com/r/ProgrammerHumor/comments/x95019/comment/inng62x/?utm_source=share&utm_medium=web2x&context=3 */
+
+/* You can do parameter pack expansion via this special ... pattern syntax.
+ * so this becomes:: (std::cout << std::forward<T1>(t1), std::cout << std::forward<T2>(t2)...) 
+ *
+ * Its also using std::forward to preserve the value category of the input. */
+template <typename ...Ts>
+void print_2(Ts &&...ts) {
+    ((std::cout << std::forward<Ts>(ts)), ...) << std::endl;
+}
+
 int main() {    
     // Hooray!
     println("Some words", 123, 16.66, 123, 123, 123, 123, 123, 456);
@@ -35,7 +48,12 @@ int main() {
     // println("Some words", 123, 16.66, 123, 123, 123, 123, 123, p1, 456);
     
     println("First => ", CustomType {}, " Second => ", CustomType {1, 2});
+
+    print_2(120, " ", "hello ", CustomType {});
 }
 
+
 /* Link against the library:
- * CPPC experimental/variadic_print.cpp build/my_utils.a -o experimental/vprint -I include/ && ./experimental/vprint*/
+ * CPPC experimental/variadic_print.cpp build/my_utils.a -o experimental/vprint -I include/ && ./experimental/vprint */
+
+
