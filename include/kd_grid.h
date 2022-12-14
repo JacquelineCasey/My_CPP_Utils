@@ -3,25 +3,28 @@
  *
  * A template for a k dimension grid containing any data type.
  * 
- * TODO: - Better access to bounds. Better encapsulation. Better iteration? Drawing prisms of various dimension.
+ * TODO: - Better access to bounds. Better iteration? Drawing prisms of various dimension.
  */
 #ifndef jackcasey067_KD_GRID_H
 #define jackcasey067_KD_GRID_H
 
 #include <array>
-#include <iostream> // only for debug
+#include <string>
 #include <vector>
 
 namespace Util {
     namespace __Util__Impl {
         /* Thus begins the template magic (or template madness). */
-        template <class T> struct dependent_false : std::false_type {}; // Used to issue a compiler error in an else after constexpr if.
+
+        /* Used to issue a compiler error in an else after constexpr if. */
+        template<class T> struct dependent_false : std::false_type {};
 
         template<typename T, typename K> // K is a std::integral_constant
         class KVec {
-        public:
+        private:
             std::vector<KVec<T, std::integral_constant<int, K::value - 1>>> vec {};
 
+        public:
             void init(std::array<int, K::value * 2> bounds, T default_value) {
                 int lower_bound {bounds[0]};
                 int upper_bound {bounds[1]};
@@ -77,21 +80,25 @@ namespace Util {
     class KDGrid {
     private:
         const std::array<int, K*2> bounds; // min1, max1, min2, max2, ...
+
+         /* Think of this as K std::vectors nested around the type T. */
+        __Util__Impl::KVec<T, std::integral_constant<int, K>> matrix {};
+
     public:
-
         static constexpr int dimensions {K};
-        /* Think of this as K std::vectors nested around the type T. */
-        __Util__Impl::KVec<T, std::integral_constant<int, K>> matrix {}; // to be privatized
-
+       
         /* Takes an array of the inclusive bounds in order. Eg {{-10, 10, -10, 10}}*/
         KDGrid(std::array<int, K*2> bounds, T default_value) : bounds {bounds} {
             matrix.init(bounds, default_value);
         }
 
-        T& operator[]([[maybe_unused]] std::array<int, K> indices) {
+        KDGrid(std::array<int, K*2> bounds) requires std::default_initializable<T>
+            : KDGrid(bounds, {}) {}
+
+        T& operator[](std::array<int, K> indices) {
             for (int k {0}; k < dimensions; k++) {
                 if (indices[k] < bounds[2 * k] || indices[k] > bounds[2 * k+1]) {
-                    throw std::length_error("KDGrid: Length Error. In the " + std::to_string(k + 1) + "'th dimension, tried to reach index " 
+                    throw std::out_of_range("KDGrid: Length Error. In the " + std::to_string(k + 1) + "'th dimension, tried to reach index " 
                         + std::to_string(indices[k]) + " but min is " + std::to_string(bounds[2 * k]) + " and max is " + std::to_string(bounds[2 * k+1]));
                 }
                 // We handle the index bump here.
