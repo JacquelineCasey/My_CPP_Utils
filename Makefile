@@ -1,5 +1,5 @@
 
-CPPC = /usr/local/Cellar/llvm/14.0.6_1/bin/clang++
+CPPC = /usr/local/Cellar/llvm/15.0.1/bin/clang++
 CPPCFLAGS = -std=c++20 -Wall -Wextra -Werror -Wpedantic -I include/ -O3
 
 SRCS = $(shell find src -type f -name '*.cpp' | sort)
