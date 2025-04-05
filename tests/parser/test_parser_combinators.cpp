@@ -201,6 +201,8 @@ void test_math_expr_parser() {
         "1 1 1 1 1 1 1 1 1 1 1 + + + + + + + + + +"
     };
 
+    // Nota Bene - I'm not sure we treat expressions like 1 - 3 + 5 correctly. We might get -7...
+
     for (size_t i {0}; i < 4; i++) {
         auto res {ParsePlusMinusExpr{}(exprs[i])};
         assert(res.has_value());
